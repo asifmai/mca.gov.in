@@ -8,6 +8,10 @@ let browser;
 
 const run = () => new Promise(async (resolve, reject) => {
   try {
+    process.on('uncaughtException', function (err) {
+      console.log(`UnCaught Exception: ${err}`);
+    });
+    
     // Remove Existing Results Found
     if (fs.existsSync('results.csv')) fs.unlinkSync('results.csv');
 
