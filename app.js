@@ -105,6 +105,20 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
             }
           }
 
+          const chargesTable = await page.$('#chargesRegistered table.result-forms > tbody > tr:not(:first-child) > td:first-child');
+          if (chargesTable) {
+            let charges;
+            if (chargesTable.length > 1) {
+              for (let i = 0; i < chargesTable.length; i++) {
+                charges = await page.evaluate(elm => elm.innerText.trim(), chargesTable[i]);
+                if (charges !== '') break;
+              }
+            } else {
+              charges = await page.evaluate(elm => elm.innerText.trim(), chargesTable[0]);
+            }
+            csvLine += `,"${charges}"`;
+          }
+
           // console.log(csvLine)
           writeToCsv('results.csv', csvLine);
           
