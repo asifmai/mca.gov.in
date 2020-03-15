@@ -96,15 +96,6 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
             }
           }
 
-          const directorsTable = await page.$('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)');
-          if (directorsTable) {
-            const directorsIds = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(1)', page);
-            const directorsNames = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)', page);
-            for (let i = 0; i < directorsNames.length; i++) {
-              csvLine+= `,${directorsIds[i]},"${directorsNames[i]}"`;
-            }
-          }
-
           const chargesTable = await page.$$('#chargesRegistered table.result-forms > tbody > tr:not(:first-child) > td:first-child');
           if (chargesTable) {
             let charges;
@@ -117,6 +108,15 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
               charges = await page.evaluate(elm => elm.innerText.trim(), chargesTable[0]);
             }
             csvLine += `,"${charges}"`;
+          }
+
+          const directorsTable = await page.$('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)');
+          if (directorsTable) {
+            const directorsIds = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(1)', page);
+            const directorsNames = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)', page);
+            for (let i = 0; i < directorsNames.length; i++) {
+              csvLine+= `,${directorsIds[i]},"${directorsNames[i]}"`;
+            }
           }
 
           // console.log(csvLine)
