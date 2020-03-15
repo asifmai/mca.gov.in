@@ -105,7 +105,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
             }
           }
 
-          const chargesTable = await page.$('#chargesRegistered table.result-forms > tbody > tr:not(:first-child) > td:first-child');
+          const chargesTable = await page.$$('#chargesRegistered table.result-forms > tbody > tr:not(:first-child) > td:first-child');
           if (chargesTable) {
             let charges;
             if (chargesTable.length > 1) {
