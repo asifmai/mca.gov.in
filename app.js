@@ -14,6 +14,7 @@ const run = () => new Promise(async (resolve, reject) => {
     
     // Remove Existing Results Found
     if (fs.existsSync('results.csv')) fs.unlinkSync('results.csv');
+    if (fs.existsSync('failecompanies.csv')) fs.unlinkSync('failecompanies.csv');
 
     // Import CINs stored in CINs.xlsx
     CINs = await excelToJson();
