@@ -28,7 +28,7 @@ const run = () => new Promise(async (resolve, reject) => {
         const foundComapny = await fetchData(CINs[i].cin);
         if (foundComapny) break;
         if (j == retryAttempts - 1) {
-          writeToCsv('failecompanies.csv', CINs[i]);
+          writeToCsv('failecompanies.csv', CINs[i].cin);
         }
       }
     }
@@ -131,6 +131,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
           await page.close();
           return resolve(true);
         } else {
+          await page.screenshot({path: 'screenshot.png'});
           console.log(`Couldn't fetch company data...`);
           const reportBadUrl = `${captchaReportBad}${captchaKey}&id=${captchaId}`;
           await axios.get(reportBadUrl);
