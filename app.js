@@ -27,6 +27,9 @@ const run = () => new Promise(async (resolve, reject) => {
         console.log(`${i+1}/${CINs.length} - Fetching Data for CIN: ${CINs[i].cin} - Attempt ${j+1}`);
         const foundComapny = await fetchData(CINs[i].cin);
         if (foundComapny) break;
+        if (j == retryAttempts - 1) {
+          writeToCsv('failecompanies.csv', CINs[i]);
+        }
       }
     }
 
