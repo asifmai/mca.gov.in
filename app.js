@@ -98,9 +98,10 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
 
           const directorsTable = await page.$('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)');
           if (directorsTable) {
-            const directors = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)', page);
-            for (let i = 0; i < directors.length; i++) {
-              csvLine+= `,"${directors[i]}"`;
+            const directorsIds = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(1)', page);
+            const directorsNames = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)', page);
+            for (let i = 0; i < directorsNames.length; i++) {
+              csvLine+= `,${directorsIds[i]},"${directorsNames[i]}"`;
             }
           }
 
