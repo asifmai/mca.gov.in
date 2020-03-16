@@ -6,17 +6,17 @@ const {siteLink, inputFile, captchaKey, captchaUrl, captchaRespUrl, captchaRepor
 let CINs;
 let browser;
 
+process.on('uncaughtException', function (err) {
+  console.log(`UnCaught Exception: ${err}`);
+});
+
 const run = () => new Promise(async (resolve, reject) => {
   try {
-    process.on('uncaughtException', function (err) {
-      console.log(`UnCaught Exception: ${err}`);
-    });
     
     // Remove Existing Results Found
     if (fs.existsSync('results.csv')) fs.unlinkSync('results.csv');
     if (fs.existsSync('failecompanies.csv')) fs.unlinkSync('failecompanies.csv');
     
-
     // Import CINs stored in CINs.xlsx
     CINs = await excelToJson();
 
@@ -89,9 +89,18 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
         ]);
 
         await page.waitFor(5000);
-        const foundTable = await page.$('#companyMasterData table.result-forms > tbody > tr > td:last-child');
+        let foundTableSelector;
+        if (cin.toLowerCase().startsWith('u')) {
+          foundTableSelector = '#companyMasterData table.result-forms > tbody > tr > td:last-child';
+        } else if (cin.toLowerCase().startsWith('aar')) {
+          foundTableSelector = '#llpMasterData table.result-forms > tbody > tr > td:last-child';
+        } else if (cin.toLowerCase().startsWith('f')) {
+          foundTableSelector = '#foreignCompanyMasterData table.result-forms > tbody > tr > td:last-child';
+        }
+
+        const foundTable = await page.$(foundTableSelector);
         if (foundTable) { 
-          const fields = await pupHelper.getTxtMultiple('#companyMasterData table.result-forms > tbody > tr > td:last-child', page);
+          const fields = await pupHelper.getTxtMultiple(foundTableSelector, page);
           let csvLine = '';
           for (let i = 0; i < fields.length; i++) {
             if (i == fields.length - 1) {
