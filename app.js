@@ -46,11 +46,12 @@ const run = () => new Promise(async (resolve, reject) => {
 
 const fetchData = (cin) => new Promise(async (resolve, reject) => {
   let page;
+  let newPage;
   try {
     let imageLoadedOnce = false;
     let base64Img;
-    page = await pupHelper.launchPage(browser);
-    
+    newPage = await pupHelper.launchPage(browser);
+
     // Get Captcha Image
     page.on('response', async (response) => {
       if (response.url().toLowerCase().includes('getcapchaimage.do') && imageLoadedOnce == false) {
@@ -139,7 +140,6 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
           console.log(`Company Found...`);
           const reportGoodUrl = `${captchaReportGood}${captchaKey}&id=${captchaId}`;
           await axios.get(reportGoodUrl);
-          await page.close();
           return resolve(true);
         } else {
           await page.screenshot({path: 'screenshot.png'});
@@ -148,16 +148,19 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
           await axios.get(reportBadUrl);
           return resolve(false);
         }
+        await page.close();
+        await newPage.close();
       }
     });
 
-    const response = await page.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
-    console.log(response.status())
-    console.log(response.statusText())
-    console.log(response.url())
+    await newPage.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
+    const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));   // Create Promise for popup window
+    await newPage.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
+    page = await newPagePromise;       // Returns the popup page
 
   } catch (error) {
-    await page.close();
+    if (page) await page.close();
+    if (newPage) await newPage.close();
     console.log(`fetchData Error: ${error.message}`);
     resolve(false);
   }
