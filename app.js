@@ -51,10 +51,10 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
     newPage = await pupHelper.launchPage(browser);
     await newPage.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
     console.log('Home page loaded');
-    await page.hover('li.paddi#services');
-    await page.waitFor(500);
+    await newPage.hover('li.paddi#services');
+    await newPage.waitFor(500);
     console.log('Hovered over Services');
-    await page.waitForSelector('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');
+    await newPage.waitForSelector('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');
     console.log('Company link found...')
     const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));   // Create Promise for popup window
     await newPage.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
