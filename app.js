@@ -162,7 +162,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
   } catch (error) {
     if (page) await page.close();
     if (newPage) await newPage.close();
-    console.log(`fetchData Error: ${error.message}`);
+    console.log(`fetchData Error: ${error}`);
     resolve(false);
   }
 })
