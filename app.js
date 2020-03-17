@@ -151,7 +151,10 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
       }
     });
 
-    await page.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
+    const response = await page.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
+    console.log(response.status())
+    console.log(response.statusText())
+    console.log(response.url())
 
   } catch (error) {
     await page.close();
