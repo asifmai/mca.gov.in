@@ -48,10 +48,15 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
   let page;
   let newPage;
   try {
+    newPage = await pupHelper.launchPage(browser);
+    await newPage.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
+    const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));   // Create Promise for popup window
+    await newPage.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
+    page = await newPagePromise;       // Returns the popup page
+
     let imageLoadedOnce = false;
     let base64Img;
-    newPage = await pupHelper.launchPage(browser);
-
+    
     // Get Captcha Image
     page.on('response', async (response) => {
       if (response.url().toLowerCase().includes('getcapchaimage.do') && imageLoadedOnce == false) {
@@ -140,24 +145,20 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
           console.log(`Company Found...`);
           const reportGoodUrl = `${captchaReportGood}${captchaKey}&id=${captchaId}`;
           await axios.get(reportGoodUrl);
+          await page.close();
+          await newPage.close();
           return resolve(true);
         } else {
           await page.screenshot({path: 'screenshot.png'});
           console.log(`Couldn't fetch company data...`);
           const reportBadUrl = `${captchaReportBad}${captchaKey}&id=${captchaId}`;
           await axios.get(reportBadUrl);
+          await page.close();
+          await newPage.close();
           return resolve(false);
         }
-        await page.close();
-        await newPage.close();
       }
     });
-
-    await newPage.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
-    const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));   // Create Promise for popup window
-    await newPage.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
-    page = await newPagePromise;       // Returns the popup page
-
   } catch (error) {
     if (page) await page.close();
     if (newPage) await newPage.close();
