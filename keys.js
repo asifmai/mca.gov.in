@@ -1,8 +1,8 @@
 const path = require('path');
 
 module.exports = {
-    // siteLink: 'http://www.mca.gov.in/mcafoportal/viewCompanyMasterData.do',
-    siteLink: 'http://www.mca.gov.in/mcafoportal/companyLLPMasterData.do',
+    siteLink: 'http://www.mca.gov.in/mcafoportal/viewCompanyMasterData.do',
+    // siteLink: 'http://www.mca.gov.in/mcafoportal/companyLLPMasterData.do',
     inputFile: 'cins.xlsx',
     captchaUrl: 'https://2captcha.com/in.php',
     captchaRespUrl: `https://2captcha.com/res.php?json=1&action=get&key=`,
