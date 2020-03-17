@@ -60,6 +60,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
     await newPage.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
     console.log('Company link clicked')
     page = await newPagePromise;       // Returns the popup page
+    await page.waitFor(2000);
     console.log(page.url());
 
     let imageLoadedOnce = false;
