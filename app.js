@@ -10,7 +10,7 @@ process.on('uncaughtException', function (err) {
   console.log(`UnCaught Exception: ${err}`);
 });
 
-process.on('unhandledRejection', reason => {
+process.on('unhandledRejection', err => {
   console.log(`Unhandled Rejection: ${err}`);
 });
 
