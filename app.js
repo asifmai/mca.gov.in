@@ -46,21 +46,21 @@ const run = () => new Promise(async (resolve, reject) => {
 
 const fetchData = (cin) => new Promise(async (resolve, reject) => {
   let page;
-  let newPage;
+  // let page;
   try {
-    newPage = await pupHelper.launchPage(browser);
-    await newPage.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
+    page = await pupHelper.launchPage(browser);
+    await page.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
     console.log('Home page loaded');
-    await newPage.hover('li.paddi#services');
-    await newPage.waitFor(500);
+    await page.hover('li.paddi#services');
+    await page.waitFor(500);
     console.log('Hovered over Services');
-    await newPage.waitForSelector('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');
+    await page.waitForSelector('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');
     console.log('Company link found...')
-    const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));   // Create Promise for popup window
-    await newPage.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
-    console.log('Company link clicked')
-    page = await newPagePromise;       // Returns the popup page
-    await page.waitFor(2000);
+    // const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));   // Create Promise for popup window
+    await page.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
+    console.log('Company link clicked');
+    // page = await newPagePromise;       // Returns the popup page
+    // await page.waitFor(2000);
     console.log(page.url());
 
     let imageLoadedOnce = false;
@@ -154,23 +154,23 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
           console.log(`Company Found...`);
           const reportGoodUrl = `${captchaReportGood}${captchaKey}&id=${captchaId}`;
           await axios.get(reportGoodUrl);
+          // await page.close();
           await page.close();
-          await newPage.close();
           return resolve(true);
         } else {
           await page.screenshot({path: 'screenshot.png'});
           console.log(`Couldn't fetch company data...`);
           const reportBadUrl = `${captchaReportBad}${captchaKey}&id=${captchaId}`;
           await axios.get(reportBadUrl);
+          // await page.close();
           await page.close();
-          await newPage.close();
           return resolve(false);
         }
       }
     });
   } catch (error) {
+    // if (page) await page.close();
     if (page) await page.close();
-    if (newPage) await newPage.close();
     console.log(`fetchData Error: ${error}`);
     resolve(false);
   }
