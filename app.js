@@ -12,6 +12,7 @@ process.on('uncaughtException', function (err) {
 
 process.on('unhandledRejection', err => {
   console.log(`Unhandled Rejection: ${err}`);
+  
 });
 
 const run = () => new Promise(async (resolve, reject) => {
