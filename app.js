@@ -116,9 +116,9 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
           let csvLine = '';
           for (let i = 0; i < fields.length; i++) {
             if (i == fields.length - 1) {
-              csvLine+= `"${fields[i]}"`;
+              csvLine+= `"${fields[i].replace(/"/gi, "'")}"`;
             } else {
-              csvLine+= `"${fields[i]}",`;
+              csvLine+= `"${fields[i].replace(/"/gi, "'")}",`;
             }
           }
 
@@ -133,7 +133,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
             } else {
               charges = await page.evaluate(elm => elm.innerText.trim(), chargesTable[0]);
             }
-            csvLine += `,"${charges}"`;
+            csvLine += `,"${charges.replace(/"/gi, "'")}"`;
           }
 
           const directorsTable = await page.$('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)');
@@ -141,7 +141,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
             const directorsIds = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(1)', page);
             const directorsNames = await pupHelper.getTxtMultiple('#signatories table.result-forms > tbody > tr:not(:first-child) > td:nth-child(2)', page);
             for (let i = 0; i < directorsNames.length; i++) {
-              csvLine+= `,${directorsIds[i]},"${directorsNames[i]}"`;
+              csvLine+= `,${directorsIds[i].replace(/"/gi, "'")},"${directorsNames[i].replace(/"/gi, "'")}"`;
             }
           }
 
