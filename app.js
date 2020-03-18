@@ -46,22 +46,14 @@ const run = () => new Promise(async (resolve, reject) => {
 
 const fetchData = (cin) => new Promise(async (resolve, reject) => {
   let page;
-  // let page;
   try {
     page = await pupHelper.launchPage(browser);
     await page.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
-    console.log('Home page loaded');
     await page.hover('li.paddi#services');
     await page.waitFor(500);
-    console.log('Hovered over Services');
     await page.waitForSelector('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');
-    console.log('Company link found...')
-    // const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));   // Create Promise for popup window
     await page.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
-    console.log('Company link clicked');
-    // page = await newPagePromise;       // Returns the popup page
-    // await page.waitFor(2000);
-    console.log(page.url());
+    console.log(`Page Loaded ${page.url()}`);
 
     let imageLoadedOnce = false;
     let base64Img;
@@ -92,7 +84,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
         } while (captchaResp2.data.request == 'CAPCHA_NOT_READY');
 
         const captchaSolution = captchaResp2.data.request;
-        // console.log(`Captcha Solution: ${captchaSolution}`);
+        console.log(`Captcha Solution: ${captchaSolution}`);
 
         await page.waitForSelector('input[name="companyID"]', {timeout: 0});
         await page.type('input[name="companyID"]', cin);
