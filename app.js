@@ -104,7 +104,7 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
         let foundTableSelector;
         if (cin.toLowerCase().startsWith('u')) {
           foundTableSelector = '#companyMasterData table.result-forms > tbody > tr > td:last-child';
-        } else if (cin.toLowerCase().startsWith('aar')) {
+        } else if (cin.toLowerCase().startsWith('a')) {
           foundTableSelector = '#llpMasterData table.result-forms > tbody > tr > td:last-child';
         } else if (cin.toLowerCase().startsWith('f')) {
           foundTableSelector = '#foreignCompanyMasterData table.result-forms > tbody > tr > td:last-child';
