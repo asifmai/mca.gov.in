@@ -54,8 +54,13 @@ const fetchData = (cin) => new Promise(async (resolve, reject) => {
   try {
     page = await pupHelper.launchPage(browser);
     await page.goto(siteLink, {timeout: 0, waitUntil: 'networkidle2'});
+    const gotBanner = await page.$('p.sbinner button');
+    if (gotBanner) {
+      await page.click('p.sbinner button');
+      await page.waitFor(200);
+    }
     await page.hover('li.paddi#services');
-    await page.waitFor(500);
+    await page.waitFor(200);
     await page.waitForSelector('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');
     await page.click('.navlinks3 > ul:first-child > li:last-child > ul > li:first-child > a');         // Do the action to open popup window
     // console.log(`Page Loaded ${page.url()}`);
