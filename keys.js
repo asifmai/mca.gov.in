@@ -6,7 +6,7 @@ module.exports = {
     inputFile: 'cins.xlsx',
     captchaUrl: 'https://2captcha.com/in.php',
     captchaRespUrl: `https://2captcha.com/res.php?json=1&action=get&key=`,
-    captchaKey: 'edff3992e423b9d8e42deea14655d139',
+    captchaKey: '',
     captchaReportBad: 'https://2captcha.com/res.php?action=reportbad&key=',
     captchaReportGood: 'https://2captcha.com/res.php?action=reportgood&key=',
     retryAttempts: 3
